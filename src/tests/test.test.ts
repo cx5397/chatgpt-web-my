@@ -1,13 +1,20 @@
+import { flushPromises, mount } from '@vue/test-utils'
 import { ref } from 'vue'
 import { describe, expect, it, vi } from 'vitest'
-
-import { useBasicLayout } from '@/hooks/useBasicLayout'
+import ChatIndex from '@/views/chat/index.vue'
 
 const addChat = vi.fn()
 const updateChat = vi.fn()
 const updateChatSome = vi.fn()
 const getChatByUuidAndIndex = vi.fn()
-const { isMobile } = useBasicLayout()
+
+const isMobile = ref(true)
+
+vi.mock('@/hooks/useBasicLayout', () => ({
+  useBasicLayout: () => ({
+    isMobile,
+  }),
+}))
 
 vi.mock('@/hooks/useChat', () => ({
   useChat: () => ({
@@ -81,5 +88,49 @@ describe('chatIndexPage', () => {
     isMobile.value = false
     expect(isMobile.value).toBe(false)
     expect(typeof isMobile.value).toBe('boolean')
+  })
+
+  it('mobileSubmitsOnCtrlEnter', async () => {
+    isMobile.value = true
+
+    const wrapper = mount(ChatIndex, {
+      global: {
+        stubs: {
+          Message: true,
+          HoverButton: true,
+          SvgIcon: true,
+        },
+      },
+    })
+
+    ;(wrapper.vm as any).prompt = 'hello mobile'
+
+    const eventSubmit = {
+      key: 'Enter',
+      ctrlKey: true,
+      preventDefault: vi.fn(),
+    }
+
+    const eventNoSubmit = {
+      key: 'Enter',
+      ctrlKey: false,
+      preventDefault: vi.fn(),
+    }
+
+    const condition = (e: any) => e.key === 'Enter' && e.ctrlKey
+
+    // 验证条件返回布尔值
+    expect(typeof condition(eventSubmit)).toBe('boolean')
+    expect(condition(eventSubmit)).toBe(true)
+
+    // 触发提交事件
+    ;(wrapper.vm as any).handleEnter(eventSubmit as any)
+    await flushPromises()
+    expect(eventSubmit.preventDefault).toHaveBeenCalled()
+
+    // 触发非提交事件
+    ;(wrapper.vm as any).handleEnter(eventNoSubmit as any)
+    await flushPromises()
+    expect(eventNoSubmit.preventDefault).not.toHaveBeenCalled()
   })
 })
