@@ -1,7 +1,8 @@
 <script setup lang='ts'>
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { NButton, NInput, useDialog } from 'naive-ui'
+import { NButton, NInput, useDialog, useMessage } from 'naive-ui'
+import html2canvas from 'html2canvas'
 import { Message } from './components'
 import { useScroll } from './hooks/useScroll'
 import { useChat } from './hooks/useChat'
@@ -16,6 +17,7 @@ let controller = new AbortController()
 
 const route = useRoute()
 const dialog = useDialog()
+const message = useMessage()
 
 const chatStore = useChatStore()
 
@@ -320,6 +322,31 @@ function handleStop() {
   }
 }
 
+async function handleSaveImage() {
+  const scrollDom = document.querySelector('#image-wrapper')
+  if (!scrollDom) {
+    message.warning(t('chat.noData'))
+    return
+  }
+
+  try {
+    const canvas = await html2canvas(scrollDom as HTMLElement, {
+      backgroundColor: '#ffffff',
+      scale: 2,
+    })
+
+    const link = document.createElement('a')
+    link.download = `chat-${Date.now()}.png`
+    link.href = canvas.toDataURL('image/png')
+    link.click()
+
+    message.success(t('chat.exportSuccess'))
+  }
+  catch (error) {
+    message.error(t('chat.importFailed'))
+  }
+}
+
 const placeholder = computed(() => {
   if (isMobile.value)
     return t('chat.placeholderMobile')
@@ -362,7 +389,7 @@ onUnmounted(() => {
         class="h-full overflow-hidden overflow-y-auto"
         :class="[isMobile ? 'p-2' : 'p-4']"
       >
-        <div class="w-full max-w-screen-xl m-auto">
+        <div id="image-wrapper" class="w-full max-w-screen-xl m-auto">
           <template v-if="!dataSources.length">
             <div class="flex items-center justify-center mt-4 text-center text-neutral-300">
               <SvgIcon icon="ri:bubble-chart-fill" class="mr-2 text-3xl" />
@@ -398,6 +425,11 @@ onUnmounted(() => {
     <footer :class="footerClass">
       <div class="w-full max-w-screen-xl m-auto">
         <div class="flex items-center justify-between space-x-2">
+          <HoverButton @click="handleSaveImage">
+            <span class="text-xl text-[#4f555e] dark:text-white">
+              <SvgIcon icon="ri:file-image-line" />
+            </span>
+          </HoverButton>
           <HoverButton @click="handleClear">
             <span class="text-xl text-[#4f555e] dark:text-white">
               <SvgIcon icon="ri:delete-bin-line" />

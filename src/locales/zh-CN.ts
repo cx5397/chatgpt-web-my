@@ -27,6 +27,7 @@ export default {
     exportSuccess: '导出成功',
     importSuccess: '导入成功',
     importFailed: '导入失败',
+    saveChat: '保存会话为图片',
   },
   setting: {
     setting: '设置',

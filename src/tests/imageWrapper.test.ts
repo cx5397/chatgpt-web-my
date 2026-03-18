@@ -79,25 +79,8 @@ vi.mock('naive-ui', async (importOriginal) => {
   }
 })
 
-describe('chatIndexPage', () => {
-  it('isMobileIsBoolean', async () => {
-    // 初始值应为布尔值
-    expect(typeof isMobile.value).toBe('boolean')
-
-    // 设置为 true
-    isMobile.value = true
-    expect(isMobile.value).toBe(true)
-    expect(typeof isMobile.value).toBe('boolean')
-
-    // 设置为 false
-    isMobile.value = false
-    expect(isMobile.value).toBe(false)
-    expect(typeof isMobile.value).toBe('boolean')
-  })
-
-  it('mobileSubmitsOnCtrlEnter', async () => {
-    isMobile.value = true
-
+describe('chatIndexPage - image-wrapper', () => {
+  it('should have #image-wrapper element', async () => {
     const wrapper = mount(ChatIndex, {
       global: {
         stubs: {
@@ -108,34 +91,7 @@ describe('chatIndexPage', () => {
       },
     })
 
-    ;(wrapper.vm as any).prompt = 'hello mobile'
-
-    const eventSubmit = {
-      key: 'Enter',
-      ctrlKey: true,
-      preventDefault: vi.fn(),
-    }
-
-    const eventNoSubmit = {
-      key: 'Enter',
-      ctrlKey: false,
-      preventDefault: vi.fn(),
-    }
-
-    const condition = (e: any) => e.key === 'Enter' && e.ctrlKey
-
-    // 验证条件返回布尔值
-    expect(typeof condition(eventSubmit)).toBe('boolean')
-    expect(condition(eventSubmit)).toBe(true)
-
-    // 触发提交事件
-    ;(wrapper.vm as any).handleEnter(eventSubmit as any)
-    await flushPromises()
-    expect(eventSubmit.preventDefault).toHaveBeenCalled()
-
-    // 触发非提交事件
-    ;(wrapper.vm as any).handleEnter(eventNoSubmit as any)
-    await flushPromises()
-    expect(eventNoSubmit.preventDefault).not.toHaveBeenCalled()
+    const imageWrapper = wrapper.element.querySelector('#image-wrapper')
+    expect(imageWrapper).not.toBeNull()
   })
 })

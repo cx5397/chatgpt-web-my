@@ -27,6 +27,7 @@ export default {
     exportSuccess: 'Export success',
     importSuccess: 'Import success',
     importFailed: 'Import failed',
+    saveChat: 'Save as Image',
   },
   setting: {
     setting: 'Setting',
