@@ -21,6 +21,9 @@ export default {
     deleteMessage: '删除消息',
     deleteMessageConfirm: '是否删除此消息?',
     deleteHistoryConfirm: '确定删除此记录?',
+    exportChat: '导出聊天记录',
+    noData: '暂无数据',
+    exportSuccess: '导出成功',
   },
   setting: {
     setting: '设置',
