@@ -72,6 +72,29 @@ function handleReset() {
   emit('update')
 }
 
+const fileInput = ref<HTMLInputElement | null>(null)
+
+function importData(e: Event) {
+  const target = e.target as HTMLInputElement
+  const file = target.files?.[0]
+  if (!file) return
+
+  const reader = new FileReader()
+  reader.onload = (event) => {
+    try {
+      const data = event.target?.result as string
+      const parsed = JSON.parse(data)
+      localStorage.setItem('chatStorage', JSON.stringify(parsed))
+      ms.success(t('chat.importSuccess'))
+      emit('update')
+    } catch {
+      ms.error(t('chat.importFailed'))
+    }
+  }
+  reader.readAsText(file)
+  target.value = ''
+}
+
 function handleExportChat() {
   const localData = localStorage.getItem('chatStorage')
   if (!localData) {
@@ -169,6 +192,19 @@ function handleExportChat() {
           </template>
           {{ $t('chat.exportChat') }}
         </NButton>
+        <NButton type="primary" @click="fileInput?.click()">
+          <template #icon>
+            <SvgIcon icon="ri:upload-line" />
+          </template>
+          {{ $t('chat.importChat') }}
+        </NButton>
+        <input
+          ref="fileInput"
+          type="file"
+          class="hidden"
+          accept=".json"
+          @change="importData"
+        >
       </div>
     </div>
   </div>

@@ -22,8 +22,11 @@ export default {
     deleteMessageConfirm: 'Are you sure to delete this message?',
     deleteHistoryConfirm: 'Are you sure to clear this history?',
     exportChat: 'Export Chat',
+    importChat: 'Import Chat',
     noData: 'No data',
     exportSuccess: 'Export success',
+    importSuccess: 'Import success',
+    importFailed: 'Import failed',
   },
   setting: {
     setting: 'Setting',
