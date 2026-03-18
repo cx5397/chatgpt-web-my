@@ -8,12 +8,6 @@ import { getCurrentDate } from '@/utils/functions'
 import type { UserInfo } from '@/store/modules/user/helper'
 import { t } from '@/locales'
 
-interface Emit {
-  (event: 'update'): void
-}
-
-const emit = defineEmits<Emit>()
-
 const appStore = useAppStore()
 const userStore = useUserStore()
 
@@ -69,7 +63,7 @@ function updateUserInfo(options: Partial<UserInfo>) {
 function handleReset() {
   userStore.resetUserInfo()
   ms.success(t('common.success'))
-  emit('update')
+  window.location.reload()
 }
 
 const fileInput = ref<HTMLInputElement | null>(null)
@@ -77,7 +71,8 @@ const fileInput = ref<HTMLInputElement | null>(null)
 function importData(e: Event) {
   const target = e.target as HTMLInputElement
   const file = target.files?.[0]
-  if (!file) return
+  if (!file)
+    return
 
   const reader = new FileReader()
   reader.onload = (event) => {
@@ -86,8 +81,9 @@ function importData(e: Event) {
       const parsed = JSON.parse(data)
       localStorage.setItem('chatStorage', JSON.stringify(parsed))
       ms.success(t('chat.importSuccess'))
-      emit('update')
-    } catch {
+      window.location.reload()
+    }
+    catch {
       ms.error(t('chat.importFailed'))
     }
   }
