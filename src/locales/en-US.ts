@@ -9,6 +9,8 @@ export default {
     wrong: 'Something went wrong, please try again later.',
     success: 'Success',
     failed: 'Failed',
+    confirm: 'Confirm',
+    cancel: 'Cancel',
   },
   chat: {
     placeholder: 'Ask me anything...(Shift + Enter = line break)',
@@ -25,6 +27,9 @@ export default {
     importChat: 'Import Chat',
     noData: 'No data',
     exportSuccess: 'Export success',
+    exportFailed: 'Export failed',
+    exportImage: 'Export Image',
+    exportConfirm: 'Are you sure you want to export the chat as an image?',
     importSuccess: 'Import success',
     importFailed: 'Import failed',
     saveChat: 'Save as Image',
