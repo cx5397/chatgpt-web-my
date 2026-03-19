@@ -37,6 +37,7 @@ vi.mock('@/locales', () => ({
 
 vi.mock('@/utils/functions', () => ({
   getCurrentDate: () => '2024-01-01',
+  handleExportChat: vi.fn(),
 }))
 
 describe('Setting/General.vue', () => {

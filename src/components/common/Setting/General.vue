@@ -4,7 +4,7 @@ import { NButton, NInput, useMessage } from 'naive-ui'
 import type { Language, Theme } from '@/store/modules/app/helper'
 import { SvgIcon } from '@/components/common'
 import { useAppStore, useUserStore } from '@/store'
-import { getCurrentDate } from '@/utils/functions'
+import { handleExportChat } from '@/utils/functions'
 import type { UserInfo } from '@/store/modules/user/helper'
 import { t } from '@/locales'
 
@@ -89,26 +89,6 @@ function importData(e: Event) {
   }
   reader.readAsText(file)
   target.value = ''
-}
-
-function handleExportChat() {
-  const localData = localStorage.getItem('chatStorage')
-  if (!localData) {
-    ms.warning(t('chat.noData'))
-    return
-  }
-
-  const blob = new Blob([localData], { type: 'application/json;charset=utf-8' })
-  const url = URL.createObjectURL(blob)
-  const link = document.createElement('a')
-  link.href = url
-  link.download = `chat-store_${getCurrentDate()}.json`
-  document.body.appendChild(link)
-  link.click()
-  document.body.removeChild(link)
-  URL.revokeObjectURL(url)
-
-  ms.success(t('chat.exportSuccess'))
 }
 </script>
 
