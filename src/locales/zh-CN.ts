@@ -9,6 +9,8 @@ export default {
     wrong: '好像出错了，请稍后再试。',
     success: '操作成功',
     failed: '操作失败',
+    confirm: '确认',
+    cancel: '取消',
   },
   chat: {
     placeholder: '来说点什么...（Shift + Enter = 换行）',
@@ -25,6 +27,9 @@ export default {
     importChat: '导入聊天记录',
     noData: '暂无数据',
     exportSuccess: '导出成功',
+    exportFailed: '导出失败',
+    exportImage: '导出图片',
+    exportConfirm: '确定要将会话导出为图片吗？',
     importSuccess: '导入成功',
     importFailed: '导入失败',
     saveChat: '保存会话为图片',
