@@ -328,32 +328,22 @@ async function handleSaveImage() {
     message.warning(t('chat.noData'))
     return
   }
+  try {
+    const canvas = await html2canvas(scrollDom as HTMLElement, {
+      backgroundColor: '#ffffff',
+      scale: 2,
+    })
 
-  dialog.warning({
-    title: t('chat.exportImage'),
-    content: t('chat.exportConfirm'),
-    positiveText: t('common.confirm'),
-    negativeText: t('common.cancel'),
-    onPositiveClick: async () => {
-      try {
-        const canvas = await html2canvas(scrollDom as HTMLElement, {
-          backgroundColor: '#ffffff',
-          scale: 2,
-          useCORS: true,
-        })
+    const link = document.createElement('a')
+    link.download = `chat-${Date.now()}.png`
+    link.href = canvas.toDataURL('image/png')
+    link.click()
 
-        const link = document.createElement('a')
-        link.download = `chat-${Date.now()}.png`
-        link.href = canvas.toDataURL('image/png')
-        link.click()
-
-        message.success(t('chat.exportSuccess'))
-      }
-      catch (error) {
-        message.error(t('chat.exportFailed'))
-      }
-    },
-  })
+    message.success(t('chat.exportSuccess'))
+  }
+  catch (error) {
+    message.error(t('chat.importFailed'))
+  }
 }
 
 const placeholder = computed(() => {
